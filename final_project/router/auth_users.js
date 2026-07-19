@@ -50,6 +50,16 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
       return res.status(404).json({ message: "Book not found" });
   }
 });
+//delete book reviews
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+    const isbn = req.params.isbn;
+    const username = req.session.authorization['username'];
+    if (books[isbn] && books[isbn].reviews[username]) {
+      delete books[isbn].reviews[username];
+      return res.status(200).json({ message: `Review by ${username} deleted successfully` });
+    }
+    return res.status(404).json({ message: "Review or Book not found" });
+  });
 
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
